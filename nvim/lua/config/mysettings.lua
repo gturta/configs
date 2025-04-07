@@ -30,6 +30,14 @@ vim.opt.scrolloff = 10
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- Disable diagnostic virtual text
+vim.diagnostic.config({
+  virtual_text = false,
+  underline = true,
+  signs = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
