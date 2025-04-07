@@ -1,0 +1,4 @@
+nvim/lua/plugins/.luarc.json
+nvim/lazy-lock.json
+nvim/.luarc.json
+tmux/plugins
