@@ -28,19 +28,20 @@ vim.opt.updatetime = 250
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
--- Disable diagnostic virtual text
 vim.diagnostic.config({
   virtual_text = false,
   underline = true,
   signs = true,
-  update_in_insert = false,
-  severity_sort = true,
+  float = { border = "single" },
 })
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', 'gK', function()
+  local show_text = not vim.diagnostic.config().virtual_text
+  vim.diagnostic.config({ virtual_text = show_text })
+end, { desc = 'Toggle diagnostic virtual lines' })
 
--- Diagnostics toggle
-vim.keymap.set('n', '<leader>df', vim.diagnostic.open_float, { desc = '[D]iagnostic [F]loat' })
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -51,11 +52,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
-vim.api.nvim_create_autocmd({'BufEnter', 'BufWinEnter'}, {
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
   desc = 'Format json with jq',
   pattern = '*.json',
   callback = function()
     vim.opt.formatprg = 'jq'
   end,
 })
-

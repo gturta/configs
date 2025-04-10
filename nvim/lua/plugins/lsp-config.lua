@@ -69,16 +69,14 @@ return {
           end
 
           if client.supports_method('textDocument/documentSymbol') then
-            vim.keymap.set('n', 'ds', require('telescope.builtin').lsp_document_symbols, { desc = "[D]ocument [S]ymbols" })
-          end
-
-          if client.supports_method('textDocument/codeAction') then
-            vim.keymap.set({ 'n', 'x' }, '<leader>ca', vim.lsp.buf.code_action, { desc = '[C]ode [A]ction' })
+            vim.keymap.set('n', 'ds', require('telescope.builtin').lsp_document_symbols,
+              { desc = "[D]ocument [S]ymbols" })
           end
 
           if client.supports_method('textDocument/formatting') then
-            vim.keymap.set({ 'n', 'x' }, '<leader>gf', vim.lsp.buf.format, { desc = 'Buffer [F]ormat' })
+            vim.keymap.set({ 'n', 'x' }, 'grf', vim.lsp.buf.format, { desc = 'Buffer [F]ormat' })
           end
+
         end
       })
     end
