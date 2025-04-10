@@ -39,6 +39,9 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
+-- Diagnostics toggle
+vim.keymap.set('n', '<leader>df', vim.diagnostic.open_float, { desc = '[D]iagnostic [F]loat' })
+
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
