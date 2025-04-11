@@ -29,7 +29,7 @@ vim.opt.updatetime = 250
 vim.opt.scrolloff = 10
 
 -- Buffer delete and switch to previous
-vim.keymap.set('n', '<leader>bd', ':bp | bd#<CR>', { desc = '[B]uffer [d]elete and switch to previous'} )
+vim.keymap.set('n', '<leader>bd', ':bp | bd#<CR>', { desc = '[B]uffer [d]elete and switch to previous' })
 
 -- Diagnostic keymaps
 vim.diagnostic.config({
@@ -43,7 +43,9 @@ vim.keymap.set('n', 'gK', function()
   local show_text = not vim.diagnostic.config().virtual_text
   vim.diagnostic.config({ virtual_text = show_text })
 end, { desc = 'Toggle diagnostic virtual lines' })
-
+-- Next / previous in quickfix window
+vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>', { desc = 'Quickfix window next line' })
+vim.keymap.set('n', '<M-k>', '<cmd>cprev<CR>', { desc = 'Quickfix window previous line' })
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -64,7 +66,8 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
 })
 
 -- Window resizing
-vim.keymap.set('n', '<M-,>', '<C-w>5<', { desc="Window width shrink by 5" })
-vim.keymap.set('n', '<M-.>', '<C-w>5>', { desc="Window width increase by 5" })
-vim.keymap.set('n', '<M-<>', '<C-w>5-', { desc="Window height shrink by 5" })
-vim.keymap.set('n', '<M->>', '<C-w>5+', { desc="Window height increase by 5" })
+vim.keymap.set('n', '<M-,>', '<C-w>5<', { desc = "Window width shrink by 5" })
+vim.keymap.set('n', '<M-.>', '<C-w>5>', { desc = "Window width increase by 5" })
+vim.keymap.set('n', '<M-<>', '<C-w>5-', { desc = "Window height shrink by 5" })
+vim.keymap.set('n', '<M->>', '<C-w>5+', { desc = "Window height increase by 5" })
+
