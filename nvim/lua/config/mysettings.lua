@@ -28,6 +28,8 @@ vim.opt.updatetime = 250
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Buffer delete and switch to previous
+vim.keymap.set('n', '<leader>bd', ':bp | bd#<CR>', { desc = '[B]uffer [d]elete and switch to previous'} )
 
 -- Diagnostic keymaps
 vim.diagnostic.config({
@@ -52,6 +54,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- JSON formatting
 vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
   desc = 'Format json with jq',
   pattern = '*.json',

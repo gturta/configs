@@ -35,9 +35,27 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
         callback = function(args)
-          --keymaps
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 
+          -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
+          -- if client:supports_method('textDocument/completion') then
+          --   vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
+          -- end
+
+          -- Auto-format ("lint") on save.
+          -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
+          if not client:supports_method('textDocument/willSaveWaitUntil')
+              and client:supports_method('textDocument/formatting') then
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              group = vim.api.nvim_create_augroup('lsp-attach', { clear = false }),
+              buffer = args.buf,
+              callback = function()
+                vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000 })
+              end,
+            })
+          end
+
+          --Keymaps
           if client.supports_method('textDocument/hover') then
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = "Hover info about symbol" })
           end
@@ -54,8 +72,7 @@ return {
           if client.supports_method('textDocument/formatting') then
             vim.keymap.set({ 'n', 'x' }, 'grf', vim.lsp.buf.format, { desc = 'Buffer [F]ormat' })
           end
-
-        end
+        end,
       })
     end
   }
