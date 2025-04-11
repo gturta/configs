@@ -30,6 +30,7 @@ return {
     --  into multiple repos for maintenance purposes.
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-path",
+    "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-nvim-lsp-signature-help",
   },
   config = function()
@@ -44,7 +45,7 @@ return {
           luasnip.lsp_expand(args.body)
         end,
       },
-      completion = { completeopt = "menu,menuone,noinsert" },
+      completion = { completeopt = "menu,menuone,noselect" },
       -- window borders
       window = {
         completion = cmp.config.window.bordered(),
@@ -56,18 +57,13 @@ return {
         ["<C-n>"] = cmp.mapping.select_next_item(),        -- Select the [n]ext item
         ["<C-p>"] = cmp.mapping.select_prev_item(),        -- Select the [p]revious item
         ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept ([y]es) the completion.
-
       }),
       sources = {
-        {
-          name = "lazydev",
-          -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-          group_index = 0,
-        },
-        { name = "nvim_lsp" },
         { name = "luasnip" },
-        { name = "path" },
+        { name = "nvim_lsp" },
         { name = "nvim_lsp_signature_help" },
+        { name = "path" },
+        { name = "buffer" },
       },
     })
 
@@ -77,5 +73,19 @@ return {
         { name = "buffer" },
       }
     })
+
+    -- Navigate to next/previous snippet token
+    vim.keymap.set({'i','s'}, '<C-k>', function()
+      if luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      end
+    end, { desc="Jump to next snippet token", silent=true })
+
+    vim.keymap.set({'i','s'}, '<C-j>', function()
+      if luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      end
+    end, { desc="Jump to previous snippet token", silent=true })
+
   end,
 }

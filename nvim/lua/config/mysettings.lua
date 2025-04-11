@@ -62,3 +62,9 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
     vim.opt.formatprg = 'jq'
   end,
 })
+
+-- Window resizing
+vim.keymap.set('n', '<M-,>', '<C-w>5<', { desc="Window width shrink by 5" })
+vim.keymap.set('n', '<M-.>', '<C-w>5>', { desc="Window width increase by 5" })
+vim.keymap.set('n', '<M-<>', '<C-w>5-', { desc="Window height shrink by 5" })
+vim.keymap.set('n', '<M->>', '<C-w>5+', { desc="Window height increase by 5" })
