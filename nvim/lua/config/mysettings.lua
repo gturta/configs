@@ -38,14 +38,18 @@ vim.diagnostic.config({
   signs = true,
   float = { border = "single" },
 })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- Location list keymaps
+vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, {desc='Show diagnostic location list'})
+vim.keymap.set('n', '<leader>lc', vim.cmd.lclose, {desc='Close diagnostic location list'})
+-- Next / previous in quickfix window
+vim.keymap.set('n', '<M-j>', '<cmd>lnext<CR>', { desc = 'Location list next line' })
+vim.keymap.set('n', '<M-k>', '<cmd>lprev<CR>', { desc = 'Location list previous line' })
+
 vim.keymap.set('n', 'gK', function()
   local show_text = not vim.diagnostic.config().virtual_text
   vim.diagnostic.config({ virtual_text = show_text })
 end, { desc = 'Toggle diagnostic virtual lines' })
--- Next / previous in quickfix window
-vim.keymap.set('n', '<M-j>', '<cmd>cnext<CR>', { desc = 'Quickfix window next line' })
-vim.keymap.set('n', '<M-k>', '<cmd>cprev<CR>', { desc = 'Quickfix window previous line' })
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {

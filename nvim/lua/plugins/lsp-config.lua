@@ -46,8 +46,7 @@ return {
 
           -- Auto-format ("lint") on save.
           -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
-          if not client:supports_method('textDocument/willSaveWaitUntil')
-              and client:supports_method('textDocument/formatting') then
+          if client:supports_method('textDocument/formatting') then
             vim.api.nvim_create_autocmd('BufWritePre', {
               group = vim.api.nvim_create_augroup('lsp-attach', { clear = false }),
               buffer = args.buf,
@@ -71,13 +70,15 @@ return {
           if client.supports_method('textDocument/formatting') then
             vim.keymap.set({ 'n', 'x' }, '<leader>bf', vim.lsp.buf.format, { desc = '[B]uffer [F]ormat' })
           end
-          -- LSP Standard Keymaps      
-          vim.keymap.set('n', 'grn', vim.lsp.buf.rename, {desc = 'Renames all references to the symbol under the cursor'})
-          vim.keymap.set('n', 'gra', vim.lsp.buf.code_action, {desc = 'Code Action'})
-          vim.keymap.set('n', 'grr', vim.lsp.buf.references, {desc = 'References to the symbol under the cursor'})
-          vim.keymap.set('n', 'gri', vim.lsp.buf.implementation, {desc = 'Implementations for the symbol under the cursor'})
-          vim.keymap.set('n', 'gO', vim.lsp.buf.document_symbol, {desc = 'Lists all symbols in the current buffer'})
-          vim.keymap.set('i', '<C-S>', vim.lsp.buf.signature_help, {desc = 'Displays signature information about the symbol'})
+          -- LSP Standard Keymaps
+          vim.keymap.set('n', 'grn', vim.lsp.buf.rename, { desc = 'Renames all references to the symbol under the cursor' })
+          vim.keymap.set('n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' })
+          vim.keymap.set('n', 'grr', vim.lsp.buf.references, { desc = 'References to the symbol under the cursor' })
+          vim.keymap.set('n', 'gri', vim.lsp.buf.implementation,
+            { desc = 'Implementations for the symbol under the cursor' })
+          vim.keymap.set('n', 'gO', vim.lsp.buf.document_symbol, { desc = 'Lists all symbols in the current buffer' })
+          vim.keymap.set('i', '<C-S>', vim.lsp.buf.signature_help,
+            { desc = 'Displays signature information about the symbol' })
         end,
       })
     end
