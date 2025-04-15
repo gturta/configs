@@ -31,7 +31,7 @@ vim.opt.scrolloff = 10
 -- Buffer delete and switch to previous
 vim.keymap.set('n', '<leader>bd', ':bp | bd#<CR>', { desc = '[B]uffer [d]elete and switch to previous' })
 
--- Diagnostic keymaps
+-- Diagnostic configuration
 vim.diagnostic.config({
   virtual_text = false,
   underline = true,
@@ -40,16 +40,16 @@ vim.diagnostic.config({
 })
 
 -- Location list keymaps
-vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, {desc='Show diagnostic location list'})
-vim.keymap.set('n', '<leader>lc', vim.cmd.lclose, {desc='Close diagnostic location list'})
+vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, { desc = 'Show diagnostic location list' })
+vim.keymap.set('n', '<leader>lc', vim.cmd.lclose, { desc = 'Close diagnostic location list' })
 -- Next / previous in quickfix window
 vim.keymap.set('n', '<M-j>', '<cmd>lnext<CR>', { desc = 'Location list next line' })
 vim.keymap.set('n', '<M-k>', '<cmd>lprev<CR>', { desc = 'Location list previous line' })
 
-vim.keymap.set('n', 'gK', function()
+vim.keymap.set('n', '<leader>tv', function()
   local show_text = not vim.diagnostic.config().virtual_text
   vim.diagnostic.config({ virtual_text = show_text })
-end, { desc = 'Toggle diagnostic virtual lines' })
+end, { desc = '[T]oggle diagnostic [V]irtual lines' })
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
@@ -74,4 +74,3 @@ vim.keymap.set('n', '<M-,>', '<C-w>5<', { desc = "Window width shrink by 5" })
 vim.keymap.set('n', '<M-.>', '<C-w>5>', { desc = "Window width increase by 5" })
 vim.keymap.set('n', '<M-<>', '<C-w>5-', { desc = "Window height shrink by 5" })
 vim.keymap.set('n', '<M->>', '<C-w>5+', { desc = "Window height increase by 5" })
-

@@ -39,13 +39,7 @@ return {
         callback = function(args)
           local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
 
-          -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|
-          -- if client:supports_method('textDocument/completion') then
-          --   vim.lsp.completion.enable(true, client.id, args.buf, {autotrigger = true})
-          -- end
-
           -- Auto-format ("lint") on save.
-          -- Usually not needed if server supports "textDocument/willSaveWaitUntil".
           if client:supports_method('textDocument/formatting') then
             vim.api.nvim_create_autocmd('BufWritePre', {
               group = vim.api.nvim_create_augroup('lsp-attach', { clear = false }),
@@ -71,7 +65,8 @@ return {
             vim.keymap.set({ 'n', 'x' }, '<leader>bf', vim.lsp.buf.format, { desc = '[B]uffer [F]ormat' })
           end
           -- LSP Standard Keymaps
-          vim.keymap.set('n', 'grn', vim.lsp.buf.rename, { desc = 'Renames all references to the symbol under the cursor' })
+          vim.keymap.set('n', 'grn', vim.lsp.buf.rename,
+            { desc = 'Renames all references to the symbol under the cursor' })
           vim.keymap.set('n', 'gra', vim.lsp.buf.code_action, { desc = 'Code Action' })
           vim.keymap.set('n', 'grr', vim.lsp.buf.references, { desc = 'References to the symbol under the cursor' })
           vim.keymap.set('n', 'gri', vim.lsp.buf.implementation,
@@ -79,6 +74,13 @@ return {
           vim.keymap.set('n', 'gO', vim.lsp.buf.document_symbol, { desc = 'Lists all symbols in the current buffer' })
           vim.keymap.set('i', '<C-S>', vim.lsp.buf.signature_help,
             { desc = 'Displays signature information about the symbol' })
+
+          if client.supports_method('textDocument/inlayHint') then
+            vim.keymap.set('n', '<leader>th', function()
+                vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+              end,
+              { desc = "[T]oggle [H]ints" })
+          end
         end,
       })
     end
