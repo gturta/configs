@@ -15,7 +15,14 @@ return {
   },
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'saghen/blink.cmp' },
+    dependencies = {
+      'saghen/blink.cmp',
+      {
+        'mrcjkb/rustaceanvim',
+        version = '^6', -- Recommended
+        lazy = false,   -- This plugin is already lazy
+      },
+    },
 
     config = function()
       local lspconfig = require("lspconfig")
@@ -30,9 +37,6 @@ return {
         capabilities = capabilities
       })
 
-      lspconfig.rust_analyzer.setup({
-        settings = {}
-      })
 
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
@@ -50,10 +54,6 @@ return {
             })
           end
 
-          --Keymaps
-          if client.supports_method('textDocument/hover') then
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = "Hover info about symbol" })
-          end
           if client.supports_method('textDocument/definition') then
             vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, { desc = "[G]oto [D]efinition" })
           end
