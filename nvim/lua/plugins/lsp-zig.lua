@@ -40,7 +40,8 @@ return {
             --
             -- Further information about build-on save:
             -- https://zigtools.org/zls/guides/build-on-save/
-            -- enable_build_on_save = true,
+            enable_build_on_save = true,
+            build_on_save_args = { "test" },
 
             -- Neovim already provides basic syntax highlighting
             semantic_tokens = "partial",
