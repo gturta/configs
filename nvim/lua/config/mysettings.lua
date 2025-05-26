@@ -28,6 +28,8 @@ vim.opt.signcolumn = 'yes'
 vim.opt.updatetime = 250
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
+--window borders
+vim.opt.winborder = 'rounded'
 
 -- Buffer delete and switch to previous
 vim.keymap.set('n', '<leader>bd', ':bp | bd#<CR>', { desc = '[B]uffer [d]elete and switch to previous' })
@@ -51,6 +53,10 @@ vim.keymap.set('n', '<leader>tv', function()
   local show_text = not vim.diagnostic.config().virtual_text
   vim.diagnostic.config({ virtual_text = show_text })
 end, { desc = '[T]oggle diagnostic [V]irtual lines' })
+
+vim.keymap.set('n', '<leader>th', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = "[T]oggle [H]ints" })
 
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
