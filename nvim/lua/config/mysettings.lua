@@ -36,7 +36,7 @@ vim.keymap.set('n', '<leader>bd', ':bp | bd#<CR>', { desc = '[B]uffer [d]elete a
 
 -- Diagnostic configuration
 vim.diagnostic.config({
-  virtual_text = false,
+  virtual_lines = true,
   underline = true,
   signs = true,
   float = { border = "single" },
