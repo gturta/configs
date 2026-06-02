@@ -13,8 +13,9 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 vim.g.have_nerd_font = true
 
-vim.opt.completeopt = { "menu", "menuone", "noselect" }
+vim.opt.completeopt = { "menu", "menuone", "noselect", "popup" }
 vim.opt.winborder = 'rounded'
+vim.opt.pumborder = 'rounded'
 
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
