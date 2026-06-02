@@ -119,7 +119,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 -- 5. KEYMAPS
 -- ============================================================================
 
--- Diagnostics / location list
+-- ========= Diagnostics / location list ==========
 vim.keymap.set("n", "<leader>ll", vim.diagnostic.setloclist, {
   desc = "Show diagnostic location list",
 })
@@ -156,12 +156,12 @@ end, {
   desc = "Toggle inlay hints",
 })
 
--- Oil
+-- ========= Oil =========
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", {
   desc = "Open Oil file browser",
 })
 
--- Telescope
+-- ========= Telescope =========
 vim.keymap.set("n", "<leader>ff", telescope_builtin.find_files, {
   desc = "Find files",
 })
@@ -177,3 +177,33 @@ vim.keymap.set("n", "<leader>fb", telescope_builtin.buffers, {
 vim.keymap.set("n", "<leader>fh", telescope_builtin.help_tags, {
   desc = "Help tags",
 })
+
+-- ========= Terminal window =========
+vim.keymap.set('n', '<leader>ti', function()
+  local current_tab = vim.api.nvim_get_current_tabpage()
+  local windows = vim.api.nvim_tabpage_list_wins(current_tab)
+  
+  -- 1. Scan all open windows in the current tab for a terminal
+  for _, win in ipairs(windows) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    local buftype = vim.api.nvim_get_option_value('buftype', { buf = buf })
+    
+    if buftype == 'terminal' then
+      -- Found an existing terminal window! Switch to it.
+      vim.api.nvim_set_current_win(win)
+      vim.cmd('startinsert')
+      return
+    end
+  end
+
+  -- 2. If no terminal window was found, create a new one
+  vim.cmd('split')
+  vim.cmd('terminal')
+  vim.cmd('startinsert')
+end, { desc = 'Toggle/Go to terminal split' })
+
+-- Easy window navigation from terminal insert mode
+vim.keymap.set('t', '<C-w>h', [[<C-\><C-n><C-w>h]], { desc = 'Move to left window' })
+vim.keymap.set('t', '<C-w>j', [[<C-\><C-n><C-w>j]], { desc = 'Move to bottom window' })
+vim.keymap.set('t', '<C-w>k', [[<C-\><C-n><C-w>k]], { desc = 'Move to top window' })
+vim.keymap.set('t', '<C-w>l', [[<C-\><C-n><C-w>l]], { desc = 'Move to right window' })
