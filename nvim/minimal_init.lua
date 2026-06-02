@@ -197,7 +197,7 @@ vim.keymap.set('n', '<leader>ti', function()
   end
 
   -- 2. If no terminal window was found, create a new one
-  vim.cmd('split')
+  vim.cmd('botright 15split')
   vim.cmd('terminal')
   vim.cmd('startinsert')
 end, { desc = 'Toggle/Go to terminal split' })
