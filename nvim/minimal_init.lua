@@ -14,20 +14,13 @@ vim.wo.relativenumber = true
 vim.g.have_nerd_font = true
 
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
+vim.opt.winborder = 'rounded'
 
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
-
--- Diagnostic configuration
--- vim.diagnostic.config({
---   virtual_lines = true,
---   underline = true,
---   signs = true,
---   float = { border = "single" },
--- })
 
 -- ==========================================================================
 -- 2. PLUGINS
@@ -39,6 +32,7 @@ vim.pack.add({
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/nvim-telescope/telescope.nvim" },
+  { src = "https://github.com/catppuccin/nvim" },
 })
 
 
@@ -89,6 +83,9 @@ telescope.setup({
   },
 })
 
+-- Catppuccin colorscheme
+vim.cmd.colorscheme("catppuccin")
+
 -- ============================================================================
 -- 4. AUTOCOMMANDS
 -- ============================================================================
@@ -107,7 +104,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-    if client and client.supports_method("textDocument/completion") then
+    if client and client:supports_method("textDocument/completion") then
       vim.lsp.completion.enable(true, client.id, args.buf, {
         autotrigger = true,
         convert = function(item)
