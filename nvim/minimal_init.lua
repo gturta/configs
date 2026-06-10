@@ -29,7 +29,6 @@ end)
 
 vim.pack.add({
   { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-  { src = "https://github.com/mrcjkb/rustaceanvim" },
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/nvim-telescope/telescope.nvim" },
@@ -46,18 +45,26 @@ vim.pack.add({
 -- Treesitter
 require("nvim-treesitter").install({ "rust", "toml" })
 
--- Rustaceanvim
-vim.g.rustaceanvim = {
-  server = {
-    capabilities = vim.lsp.protocol.make_client_capabilities(),
-    default_settings = {
-      ["rust-analyzer"] = {
-        check = { command = "clippy" },
-        fmt = { enable = true },
+-- Native LSP
+vim.lsp.config("rust_analyzer", {
+  cmd = { "rust-analyzer" },
+  filetypes = { "rust" },
+  root_markers = { "Cargo.toml", ".git" },
+  settings = {
+    ["rust-analyzer"] = {
+      check = { command = "clippy" },
+
+      completion = { callable = { snippets = "fill_arguments", }, },
+
+      inlayHints = {
+        closingBraceHints = { enable = true, minLines = 25, },
+        closureReturnTypeHints = { enable = "with_block", },
       },
     },
   },
-}
+})
+vim.lsp.enable("rust_analyzer")
+
 
 -- Oil
 require("oil").setup({
