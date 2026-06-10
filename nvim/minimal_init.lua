@@ -13,7 +13,7 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 vim.g.have_nerd_font = true
 
-vim.opt.completeopt = { "menu", "menuone", "noselect", "popup" }
+vim.opt.completeopt = { "fuzzy", "menu", "menuone", "noinsert", "popup" }
 vim.opt.winborder = 'rounded'
 vim.opt.pumborder = 'rounded'
 
@@ -34,7 +34,9 @@ vim.pack.add({
   { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/nvim-telescope/telescope.nvim" },
   { src = "https://github.com/catppuccin/nvim" },
-})
+  -- required by markdown-preview which comes next
+  { src = "https://github.com/selimacerbas/live-server.nvim" },
+  { src = "https://github.com/selimacerbas/markdown-preview.nvim" },})
 
 
 -- ============================================================================
@@ -156,6 +158,9 @@ vim.keymap.set("n", "<leader>th", function()
 end, {
   desc = "Toggle inlay hints",
 })
+vim.keymap.set('i', '<c-space>', function()
+  vim.lsp.completion.get()
+end, { desc = "Trigger autocomplete" } )
 
 -- ========= Oil =========
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", {
@@ -208,3 +213,9 @@ vim.keymap.set('t', '<C-w>h', [[<C-\><C-n><C-w>h]], { desc = 'Move to left windo
 vim.keymap.set('t', '<C-w>j', [[<C-\><C-n><C-w>j]], { desc = 'Move to bottom window' })
 vim.keymap.set('t', '<C-w>k', [[<C-\><C-n><C-w>k]], { desc = 'Move to top window' })
 vim.keymap.set('t', '<C-w>l', [[<C-\><C-n><C-w>l]], { desc = 'Move to right window' })
+
+-- ========= Markdown Preview =========
+vim.keymap.set("n", "<leader>mps", "<cmd>MarkdownPreview<cr>", { desc = "Markdown: Start preview" })
+vim.keymap.set("n", "<leader>mpS", "<cmd>MarkdownPreviewStop<cr>", { desc = "Markdown: Stop preview" })
+vim.keymap.set("n", "<leader>mpr", "<cmd>MarkdownPreviewRefresh<cr>", { desc = "Markdown: Refresh preview" })
+
