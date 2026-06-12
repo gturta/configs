@@ -11,13 +11,16 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.wo.number = true
-vim.wo.relativenumber = true
-vim.g.have_nerd_font = true
-
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevelstart=4
+vim.opt.autocomplete = true
 vim.opt.completeopt = { "fuzzy", "menu", "menuone", "noinsert", "popup" }
 vim.opt.winborder = 'rounded'
 vim.opt.pumborder = 'rounded'
+vim.wo.number = true
+vim.wo.relativenumber = true
+vim.g.have_nerd_font = true
 
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
@@ -35,6 +38,10 @@ vim.pack.add({
   { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/nvim-telescope/telescope.nvim" },
   { src = "https://github.com/catppuccin/nvim" },
+  { src = "https://github.com/tpope/vim-dadbod" },
+  { src = "https://github.com/kristijanhusak/vim-dadbod-ui" },
+  { src = "https://github.com/kristijanhusak/vim-dadbod-completion" },
+  { src = "https://github.com/nvim-tree/nvim-web-devicons" },
 })
 
 
@@ -94,6 +101,10 @@ telescope.setup({
 -- Catppuccin colorscheme
 vim.cmd.colorscheme("catppuccin")
 
+-- dadbod settings
+vim.g.db_ui_use_nerd_fonts = 1
+-- vim.g.db_ui_win_position = "right"
+
 -- ============================================================================
 -- 4. AUTOCOMMANDS
 -- ============================================================================
@@ -106,7 +117,14 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
   end,
 })
-
+-- dadbod completion
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "sql", "mysql" },
+  callback = function(args)
+    vim.bo[args.buf].omnifunc = "vim_dadbod_completion#omni"
+    vim.bo[args.buf].complete = ".,w,b,u,t,i,o"
+  end,
+})
 -- Enable native completion when LSP supports it
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
