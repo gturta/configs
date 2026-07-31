@@ -6,14 +6,14 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 vim.opt.expandtab = true
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.shiftwidth = 2
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldlevelstart=9
+vim.opt.foldlevelstart=19
 vim.opt.autocomplete = true
 vim.opt.completeopt = { "fuzzy", "menu", "menuone", "noinsert", "popup" }
 vim.opt.winborder = 'rounded'
@@ -21,7 +21,7 @@ vim.opt.pumborder = 'rounded'
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.g.have_nerd_font = true
-
+vim.opt.autoread = true
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
@@ -42,9 +42,6 @@ vim.pack.add({
   { src = "https://github.com/kristijanhusak/vim-dadbod-ui" },
   { src = "https://github.com/kristijanhusak/vim-dadbod-completion" },
   { src = "https://github.com/nvim-tree/nvim-web-devicons" },
-  { src = "https://github.com/nickjvandyke/opencode.nvim",
-    version = vim.version.range("*"), -- Latest stable release
-  },
 })
 
 
@@ -109,21 +106,6 @@ vim.g.db_ui_use_nerd_fonts = 1
 -- vim.g.db_ui_win_position = "right"
 
 
--- opencode
----@type opencode.Opts
-vim.g.opencode_opts = {
-  -- Your configuration, if any; goto definition on the type for details
-}
-
--- Recommended/example keymaps
-vim.keymap.set({ "n", "x" }, "<leader>oca",   function() require("opencode").ask("@this: ") end,                    { desc = "Ask OpenCode…" })
-vim.keymap.set({ "n", "x" }, "<leader>ocx",   function() require("opencode").select() end,                          { desc = "Select OpenCode…" })
--- vim.keymap.set({ "n", "x" }, "go",      function() return require("opencode").operator("@this ") end,         { desc = "Append range to OpenCode", expr = true })
--- vim.keymap.set({ "n" },      "goo",     function() return require("opencode").operator("@this ") .. "_" end,  { desc = "Append line to OpenCode", expr = true })
--- vim.keymap.set({ "n" },      "<S-C-u>", function() require("opencode").command("session.half.page.up") end,   { desc = "Scroll OpenCode up" })
--- vim.keymap.set({ "n" },      "<S-C-d>", function() require("opencode").command("session.half.page.down") end, { desc = "Scroll OpenCode down" })
-
-
 -- ============================================================================
 -- 4. AUTOCOMMANDS
 -- ============================================================================
@@ -159,7 +141,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
   end,
 })
-
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+  command = "checktime",
+})
 -- ============================================================================
 -- 5. KEYMAPS
 -- ============================================================================
