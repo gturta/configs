@@ -22,6 +22,7 @@ vim.wo.number = true
 vim.wo.relativenumber = true
 vim.g.have_nerd_font = true
 vim.opt.autoread = true
+vim.opt.termguicolors = true
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
