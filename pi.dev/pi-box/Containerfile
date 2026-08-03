@@ -1,0 +1,22 @@
+FROM node:lts-slim
+
+# Suppress npm update notifications inside the container
+ENV NO_UPDATE_NOTIFIER=1
+
+# Install git and other essentials
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    fd-find \
+    ripgrep \
+    curl \
+    jq \
+    make \
+    python3 \
+    openssh-client \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install pi globally
+RUN npm install -g @earendil-works/pi-coding-agent
+
+# Project files will be mounted here at runtime
+WORKDIR /workspace

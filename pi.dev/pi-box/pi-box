@@ -1,0 +1,35 @@
+#!/bin/sh
+# pi-box — run the pi coding agent in a sandboxed Podman container.
+# Only the current directory and ~/.pi are accessible inside the container.
+#
+# Usage: pi-box [pi args...]
+# Setup: podman build -t pi-box <path-to-Containerfile-dir>
+
+set -e
+
+IMAGE="pi-box:latest"
+
+# T1.3 — verify Podman is available
+command -v podman >/dev/null 2>&1 || {
+  echo "pi-box: 'podman' not found. Install Podman to use pi-box." >&2
+  echo "  macOS:  brew install podman" >&2
+  echo "  Linux:  https://podman.io/docs/installation" >&2
+  exit 1
+}
+
+# Build the volume mount arguments
+MOUNTS="-v $(pwd):/workspace:z"
+
+# T1.2 — mount ~/.pi read-only if it exists
+if [ -d "$HOME/.pi" ]; then
+  MOUNTS="$MOUNTS -v $HOME/.pi:/root/.pi:z"
+else
+  echo "pi-box: warning: '$HOME/.pi' not found — pi config and credentials will not be available." >&2
+fi
+
+# Launch pi inside the container.
+# exec replaces this shell process so signals (Ctrl-C, etc.) go straight to Podman.
+exec podman run --rm -it \
+  $MOUNTS \
+  -w /workspace \
+  "$IMAGE" pi "$@"
