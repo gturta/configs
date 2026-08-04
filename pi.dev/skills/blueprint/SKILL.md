@@ -6,6 +6,8 @@ allowed-tools: read bash write
 
 # Blueprint Skill
 
+> Part of the four-skill pipeline: `requirements` → **blueprint** → `design` → `implement`. See `skills/README.md` for the full flow and re-planning rules.
+
 Turn a requirements spec into a concrete implementation plan: architecture first, then milestones and tasks.
 
 ## Principles
@@ -39,7 +41,7 @@ Use this context to inform tech stack choices and avoid conflicts with existing 
 
 ### Step 2 — Requirements Audit
 
-Before touching architecture, audit the spec for missing, vague, or contradictory requirements. Go through each section of the spec and flag problems in these categories:
+Before touching architecture, audit the spec for missing, vague, or contradictory requirements. **Scope this audit to spec-level gaps only** (problem, users, behaviour, acceptance criteria, NFRs). Do not surface low-level design questions here — those are the `design` skill's job, per milestone. Flagging "which JSON field name" at this stage would send the user in circles. Go through each section of the spec and flag problems in these categories:
 
 | Category | What to look for |
 |----------|-----------------|
@@ -126,7 +128,8 @@ Guidelines for tasks:
 - Include: what to build, key inputs/outputs or interfaces to respect, and the done criterion.
 - Assign a size: **S** (< 2h), **M** (half day), **L** (full day), **XL** (needs breaking down — flag it).
 - List blocking dependencies using task IDs (e.g., "Depends on: T1.2").
-- Flag tasks that have significant uncertainty or require a spike: 🔍.
+- Every task starts with `Status: todo`. The `implement` skill flips it through `in-progress` → `done` (or `blocked`).
+- Flag tasks that have significant uncertainty or require a spike: 🔍. These are resolved during the `design` skill's per-milestone pass, not by the implementer.
 
 ### Step 5 — Review & Write
 
@@ -194,19 +197,19 @@ _Generated from: `<path to spec>`_
 **Goal:** <what this milestone achieves>  
 **Done when:** <verifiable completion criterion>
 
-| ID | Task | Size | Depends on | Notes |
-|----|------|------|------------|-------|
-| T0.1 | <imperative description> | S/M/L | — | |
-| T0.2 | ... | ... | T0.1 | |
+| ID | Task | Size | Depends on | Status | Notes |
+|----|------|------|------------|--------|-------|
+| T0.1 | <imperative description> | S/M/L | — | todo | |
+| T0.2 | ... | ... | T0.1 | todo | |
 
 ### Milestone 1 — <Name>
 **Goal:** ...  
 **Done when:** ...
 
-| ID | Task | Size | Depends on | Notes |
-|----|------|------|------------|-------|
-| T1.1 | ... | ... | T0.x | |
-| ...  | ... | ... | ...  | |
+| ID | Task | Size | Depends on | Status | Notes |
+|----|------|------|------------|--------|-------|
+| T1.1 | ... | ... | T0.x | todo | |
+| ...  | ... | ... | ...  | todo  | |
 
 _(Repeat for each milestone)_
 
@@ -235,6 +238,12 @@ _(Repeat for each milestone)_
 _(Items from the spec's Non-Goals, carried forward for reference.)_
 
 - ...
+
+---
+
+## Implementation Notes
+
+_Populated by the `implement` skill as tasks are completed. Records deviations from the plan, contracts inferred without a design doc, and other post-hoc decisions. Empty until implementation begins._
 ```
 
 ## Starting

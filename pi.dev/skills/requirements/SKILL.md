@@ -4,7 +4,9 @@ description: "Guides the user through a structured requirements interview to pro
 allowed-tools: read bash write
 ---
 
-# Spec Skill
+# Requirements Skill
+
+> Part of the four-skill pipeline: **requirements** → `blueprint` → `design` → `implement`. See `skills/README.md` for the full flow.
 
 Help the user produce a detailed `REQUIREMENTS.md` by conducting a focused requirements interview. Ask questions, synthesize answers, and write the file when you have enough information.
 
@@ -40,7 +42,7 @@ ls REQUIREMENTS.md REQUIREMENTS_QUESTIONS.md 2>/dev/null || find . -maxdepth 3 \
 ## Improvement Mode
 
 ### Goal
-Use the questions in `SPEC_QUESTIONS.md` (and the existing `SPEC.md` as context) to conduct a focused interview that fills in the gaps, then rewrite `SPEC.md` with the improved content.
+Use the questions in `REQUIREMENTS_QUESTIONS.md` (and the existing `REQUIREMENTS.md` as context) to conduct a focused interview that fills in the gaps, then rewrite `REQUIREMENTS.md` with the improved content.
 
 ### Step 1 — Read Context
 Read both files in full:
