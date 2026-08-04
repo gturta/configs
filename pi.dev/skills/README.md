@@ -15,7 +15,7 @@ Four skills work together to take an idea from a fuzzy request to shipped, quali
 | # | Skill | Input | Output | Purpose |
 |---|-------|-------|--------|---------|
 | 1 | `requirements` | (conversation) | `REQUIREMENTS.md` | Define **what** to build and **why**. Users, features, acceptance criteria, non-goals. Problem-space only. |
-| 2 | `blueprint` | `REQUIREMENTS.md` | `BLUEPRINT.md` (+ `REQUIREMENTS_QUESTIONS.md` if gaps found) | Define the **shape**: architecture, tech stack, milestones, task list. Solution-space at the "system" level. |
+| 2 | `blueprint` | `REQUIREMENTS.md` | `BLUEPRINT.md` (+ rows appended to the spec's **Open Questions** section if gaps found) | Define the **shape**: architecture, tech stack, milestones, task list. Solution-space at the "system" level. |
 | 3 | `design` | `BLUEPRINT.md` + `REQUIREMENTS.md` + on-disk artifacts | `DESIGN_M<n>.md` per milestone | Define the **low-level contracts**: exact JSON shapes, type signatures, module interfaces, per-task acceptance criteria. Resolves 🔍 spike tasks. Interactive with options. |
 | 4 | `implement` | `BLUEPRINT.md` + `REQUIREMENTS.md` + `DESIGN_M<n>.md` | Source code + updated `BLUEPRINT.md` | Turn tasks into code one at a time, verify each, mark status in the plan. |
 
@@ -25,15 +25,14 @@ Each file has one clear owner and a documented set of edits other skills may mak
 
 | File | Owner | Other writers | Notes |
 |------|-------|---------------|-------|
-| `REQUIREMENTS.md` | `requirements` | — | Rewritten in place during Improvement Mode. |
-| `REQUIREMENTS_QUESTIONS.md` | `blueprint` (writer), `requirements` (consumer) | — | Deleted by `requirements` once resolved. |
+| `REQUIREMENTS.md` | `requirements` | `blueprint` (appends audit findings to the **Open Questions** section) | Contains the spec plus an **Open Questions** table (`# Question Concern Priority Owner Status`). `requirements` flips rows `Open → Closed/Deferred` in place during Improvement Mode. |
 | `BLUEPRINT.md` | `blueprint` | `design` (marks milestones as designed; closes `Open Decisions`), `implement` (updates `Status` column, `Implementation Notes`, `Open Decisions` on blockers) | Task tables include a `Status` column from the start. `Implementation Notes` section is reserved for `implement`. |
 | `DESIGN_M<n>.md` | `design` | — | Per milestone. Authoritative for shapes/signatures/acceptance criteria in that milestone. |
 
 ## When to run what
 
 - **Starting a new project** → `requirements` → `blueprint` → `design` (M0/M1) → `implement`.
-- **Blueprint audit found gaps** → `requirements` in Improvement Mode → re-run `blueprint`.
+- **Blueprint audit found gaps** → `requirements` in Improvement Mode (resolves the spec's Open Questions rows) → re-run `blueprint`.
 - **Ready to start a new milestone** → `design` for that milestone → `implement`.
 - **A task hits a blocker** → `implement` marks it `blocked`, adds to `Open Decisions`. Resolve via `design` (if a shape question) or a conversation with the user, then resume.
 - **Something changed upstream** → see Re-planning below.
@@ -71,9 +70,19 @@ The skills use these terms consistently. Aliases are noted for readability but t
 
 Each skill has its own principles, but three are shared:
 
-1. **Every decision has a home.** Requirements decisions live in `REQUIREMENTS.md`. Architectural decisions in `BLUEPRINT.md`. Contract decisions in `DESIGN_M<n>.md`. Never encode a design decision in code that isn't reflected in the design doc.
+1. **Every decision has a home.** Requirements decisions live in `REQUIREMENTS.md` (including its **Open Questions** section). Architectural decisions in `BLUEPRINT.md`. Contract decisions in `DESIGN_M<n>.md`. Never encode a design decision in code that isn't reflected in the design doc.
 2. **Ask, don't guess, at the right level.** `requirements` and `design` are interactive interviews. `blueprint` and `implement` proceed with sensible defaults but surface every assumption in writing.
 3. **Trace forward and back.** Every task cites a requirement. Every contract cites a task. Every code change cites a task ID. Reviewers and future contributors can walk the chain in either direction.
+
+## The Open Questions convention
+
+Unresolved requirement points live **inside** `REQUIREMENTS.md` under `## Open Questions`, not in a separate file. This is the single home for anything the user hasn't decided yet, owned and triaged by `requirements` and populated by `blueprint`'s audit.
+
+- **Schema:** `| # | Question | Concern | Priority | Owner | Status |`
+- **Concern** ∈ {Missing, Vague, Contradictory, Untestable, Architectural, —}. **Priority** ∈ {Critical, Important, Minor}. **(#, Owner)** are assigned as rows are created.
+- **Status** ∈ {Open, Closed, Deferred}. `requirements` moves rows forward during Improvement Mode: `Open → Closed` (with a resolution note) or `Open → Deferred` (parked with a reason, usually Minor or out-of-scope).
+- **Guards.** `design` warns only on rows that are `Open` **and** Priority ∈ {Critical, Important}. `Closed`, `Deferred`, and `Minor` never block design.
+- **Why inline rather than a file:** one source of truth, no cross-file merge during improvement mode, no stale-file or delete lifecycle, and simpler guards. The audit's diagnostic value is preserved via the Concern/Priority columns.
 
 ## What's missing (not yet built)
 

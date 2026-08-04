@@ -28,17 +28,19 @@ Turn a milestone's tasks into a concrete low-level design that leaves nothing fo
 Find the spec, blueprint, and any prior design docs:
 
 ```bash
-ls REQUIREMENTS.md BLUEPRINT.md REQUIREMENTS_QUESTIONS.md DESIGN_M*.md 2>/dev/null
-find . -maxdepth 3 \( -name "REQUIREMENTS.md" -o -name "BLUEPRINT.md" -o -name "REQUIREMENTS_QUESTIONS.md" -o -name "DESIGN_M*.md" \) 2>/dev/null | head -20
+ls REQUIREMENTS.md BLUEPRINT.md DESIGN_M*.md 2>/dev/null
+find . -maxdepth 3 \( -name "REQUIREMENTS.md" -o -name "BLUEPRINT.md" -o -name "DESIGN_M*.md" \) 2>/dev/null | head -20
 ```
 
-`BLUEPRINT.md` is required. If missing, tell the user to run the blueprint skill first and stop. Read the blueprint and spec in full. Read any prior `DESIGN_M<n>.md` files too — earlier milestones' design decisions constrain later ones.
+`BLUEPRINT.md` is required. If missing, tell the user to run the blueprint skill first and stop. Read the blueprint and spec in full (including the spec's **Open Questions** section). Read any prior `DESIGN_M<n>.md` files too — earlier milestones' design decisions constrain later ones.
 
-**Guard: unresolved requirements.** If `REQUIREMENTS_QUESTIONS.md` exists and still contains unresolved Critical or Important questions, warn the user:
+**Guard: unresolved requirements.** Read the **Open Questions** section of `REQUIREMENTS.md`. If any row has `Status: Open` **and** `Priority` ∈ {Critical, Important}, warn the user:
 
-> "The blueprint audit left unresolved spec questions in `REQUIREMENTS_QUESTIONS.md`. Design decisions built on a shaky spec often get thrown away. Recommend running the `requirements` skill first. Continue anyway? (y/N)"
+> "The spec still has unresolved open questions (e.g. #4 · Critical · "is `previous` the prior month or prior reading?"). Design decisions built on a shaky spec often get thrown away. Recommend running the `requirements` skill to resolve them first. Continue anyway? (y/N)"
 
-If the user declines, stop. Otherwise proceed but note in the design doc's Assumptions table which spec questions were still open.
+If the user declines, stop. Otherwise proceed but note in the design doc's Assumptions table which open questions were still unresolved.
+
+Ignore rows that are `Status: Closed` or `Status: Deferred`, and ignore `Priority: Minor` even when Open — none of those block design.
 
 ### Step 2 — Pick the Milestone
 
